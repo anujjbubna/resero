@@ -1,5 +1,8 @@
 :root {
   --bg: #f3efe8;
+  --bg-gradient-start: #f7f4ee;
+  --bg-gradient-end: #efe9df;
+  --bg-glow: rgba(255, 255, 255, 0.75);
   --surface: rgba(255, 255, 255, 0.72);
   --surface-strong: rgba(255, 255, 255, 0.9);
   --line: rgba(20, 27, 24, 0.1);
@@ -7,11 +10,34 @@
   --muted: #5d665f;
   --accent: #20392c;
   --accent-soft: #dfe6dc;
+  --button-secondary-bg: rgba(255, 255, 255, 0.5);
+  --metric-bg: rgba(223, 230, 220, 0.55);
+  --metric-border: rgba(32, 57, 44, 0.08);
+  --grid-line: rgba(23, 32, 25, 0.03);
   --shadow: 0 24px 80px rgba(23, 32, 25, 0.08);
   --radius-lg: 32px;
   --radius-md: 24px;
   --radius-sm: 16px;
   --max-width: 1180px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f1713;
+  --bg-gradient-start: #18221d;
+  --bg-gradient-end: #0c120f;
+  --bg-glow: rgba(77, 104, 88, 0.18);
+  --surface: rgba(20, 30, 25, 0.8);
+  --surface-strong: rgba(28, 40, 34, 0.94);
+  --line: rgba(206, 220, 209, 0.12);
+  --text: #eef4ee;
+  --muted: #a2b0a5;
+  --accent: #d6e4d6;
+  --accent-soft: #1d2923;
+  --button-secondary-bg: rgba(214, 228, 214, 0.08);
+  --metric-bg: rgba(214, 228, 214, 0.08);
+  --metric-border: rgba(214, 228, 214, 0.12);
+  --grid-line: rgba(214, 228, 214, 0.05);
+  --shadow: 0 28px 90px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -28,8 +54,8 @@ body {
   font-family: "Manrope", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(255, 255, 255, 0.75), transparent 34%),
-    linear-gradient(180deg, #f7f4ee 0%, #efe9df 100%);
+    radial-gradient(circle at top left, var(--bg-glow), transparent 34%),
+    linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
 }
 
 body::before {
@@ -37,8 +63,8 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background-image: linear-gradient(rgba(23, 32, 25, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(23, 32, 25, 0.03) 1px, transparent 1px);
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.4), transparent 85%);
 }
@@ -72,7 +98,9 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 18px;
   padding: 20px 0 32px;
+  flex-wrap: wrap;
 }
 
 .brand {
@@ -111,6 +139,60 @@ h3 {
 .site-nav a:hover,
 .site-nav a:focus-visible {
   color: var(--text);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 16px 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  transform: translateY(-1px);
+}
+
+.theme-toggle-track {
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.theme-toggle-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  transform: translateX(0);
+  transition: transform 180ms ease, background-color 180ms ease;
+}
+
+:root[data-theme="dark"] .theme-toggle-thumb {
+  transform: translateX(18px);
+}
+
+.theme-toggle-label {
+  font-size: 0.92rem;
+  font-weight: 700;
 }
 
 .hero {
@@ -159,7 +241,7 @@ h3 {
 
 .hero h1 span {
   display: inline-block;
-  color: #46614f;
+  color: color-mix(in srgb, var(--accent) 70%, #71927a 30%);
 }
 
 .hero-text {
@@ -197,11 +279,11 @@ h3 {
 
 .button-primary {
   background: var(--accent);
-  color: #f8f6f1;
+  color: var(--bg);
 }
 
 .button-secondary {
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--button-secondary-bg);
   border-color: var(--line);
 }
 
@@ -230,8 +312,8 @@ h3 {
 .metric-grid > div {
   padding: 18px 20px;
   border-radius: 20px;
-  background: rgba(223, 230, 220, 0.55);
-  border: 1px solid rgba(32, 57, 44, 0.08);
+  background: var(--metric-bg);
+  border: 1px solid var(--metric-border);
 }
 
 .metric-value {
@@ -376,6 +458,14 @@ h3 {
   .button {
     transition: none;
   }
+
+  .theme-toggle {
+    transition: none;
+  }
+
+  .theme-toggle-thumb {
+    transition: none;
+  }
 }
 
 @media (max-width: 980px) {
@@ -399,9 +489,7 @@ h3 {
   }
 
   .site-header {
-    flex-direction: column;
     align-items: flex-start;
-    gap: 18px;
   }
 
   .site-nav {

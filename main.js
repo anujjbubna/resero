@@ -1,3 +1,43 @@
+const themeToggle = document.querySelector(".theme-toggle");
+const themeLabel = document.querySelector(".theme-toggle-label");
+const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+const applyTheme = (theme) => {
+  document.documentElement.dataset.theme = theme;
+
+  if (themeToggle) {
+    const isDark = theme === "dark";
+    themeToggle.setAttribute("aria-pressed", String(isDark));
+    themeToggle.setAttribute(
+      "aria-label",
+      isDark ? "Switch to light mode" : "Switch to dark mode"
+    );
+  }
+
+  if (themeLabel) {
+    themeLabel.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+  }
+};
+
+applyTheme(document.documentElement.dataset.theme || "light");
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const nextTheme =
+      document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    localStorage.setItem("resero-theme", nextTheme);
+    applyTheme(nextTheme);
+  });
+}
+
+darkModeMediaQuery.addEventListener("change", (event) => {
+  if (localStorage.getItem("resero-theme")) {
+    return;
+  }
+
+  applyTheme(event.matches ? "dark" : "light");
+});
+
 const revealTargets = document.querySelectorAll(
   ".hero-copy, .hero-panel, .info-card, .step-card, .resource-item, .cta-section"
 );
